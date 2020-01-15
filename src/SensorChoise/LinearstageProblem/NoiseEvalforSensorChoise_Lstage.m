@@ -55,7 +55,7 @@ legend('pos','vel','Best')
 
 %%
 P_obs_ = zeros(2,2,len);
-Fnum = 5;
+Fnum = 0.5;
 F = -place(sysd.A,sysd.B,exp(ST*-Fnum*bwbase));
  
 
@@ -234,40 +234,31 @@ KF_err_real = [diag(Pxinf);diag(Pinf)];
 
 
 %% Showing
+
+onespole = ones(size(lpoles));
 figure(4)
 % plot(final_errex(:,1:3))
 clf
 grid on
-plot(lpoles,log(Final_err_real(:,1)),'o-',lpoles,log(Final_err_real(:,2)),'x-')
+plot(lpoles,log(Final_err_real(:,1)),'o-',lpoles,log(Final_err_real(:,2)),'x-',lpoles,onespole*log(KF_err_real(1)),'--',lpoles,onespole*log(KF_err_real(2)),'-.')
 grid on
 xlabel('pole frequency [rad]')
 ylabel('log of error covariance ')
-legend('pos','vel','acc','best')
+legend('pos','vel','KF pos','KF vel')
 title('Remaining noise after control')
 
 figure(5)
 clf
 % plot(final_errex(:,4:6))
 grid on
-plot(lpoles,log(Final_err_real(:,3)),'o-',lpoles,log(Final_err_real(:,4)),'x-')
+plot(lpoles,log(Final_err_real(:,3)),'o-',lpoles,log(Final_err_real(:,4)),'x-',KF_err_real(3),KF_err_real(4),'s',lpoles,onespole*log(KF_err_real(3)),'--',lpoles,onespole*log(KF_err_real(4)),'-.')
 grid on
 xlabel('pole frequency [rad]')
 ylabel('log of error covariance ')
-legend('pos','vel','acc','best')
+legend('pos','vel','KF pos','KF vel')
 title('Observation noise')
 
 
-figure(11)
-clf
-hold on
-% plot(lpoles,log(final_errex(:,1)+final_errex(:,2)),'s-',lpoles,log(final_errex(:,3)+final_errex(:,4)),'*-')
-plot(lpoles,log(Final_err_real(:,1)+Final_err_real(:,2)),'s-',lpoles,log(Final_err_real(:,3)+Final_err_real(:,4)),'*-')
-grid on
-xlabel('pole frequency [rad]')
-ylabel('log of trace of error covariance ')
-legend('terminal state','observation err','Location','best')
-title('Trace of control and observation noise convariance')
-SaveFigPDF(11,'trace_sim_F'+string(Fnum))
 
 %% Compared with KF?
 
@@ -306,7 +297,7 @@ xlabel('pole frequency [rad]')
 ylabel('log of error covariance ')
 legend('pos_{pred}','vel_{pred}','pos_{sim}','vel_{sim}','Location','eastoutside')
 title('Terminal state covariance with different poles')
-SaveFigPDF(6,'statenoise_sim')
+SaveFigPDF(6,'statenoise_sim'+string(Fnum))
 
 figure(7)
 clf
@@ -319,9 +310,32 @@ xlabel('pole frequency [rad]')
 ylabel('log of error covariance ')
 legend('pos_{pred}','vel_{pred}','pos_{sim}','vel_{sim}','Location','eastoutside')
 title('Observation noise with different poles')
-SaveFigPDF(7,'obsnoise_sim')
+SaveFigPDF(7,'obsnoise_sim'+string(Fnum))
 
 
+figure(11)
+clf
+hold on
+% plot(lpoles,log(final_errex(:,1)+final_errex(:,2)),'s-',lpoles,log(final_errex(:,3)+final_errex(:,4)),'*-')
+plot(lpoles,log(Final_err_real(:,1)+Final_err_real(:,2)),'s-',lpoles,log(Final_err_real(:,3)+Final_err_real(:,4)),'*-')
+grid on
+xlabel('pole frequency [rad]')
+ylabel('log of trace of error covariance ')
+legend('terminal state','observation err','Location','best')
+title('Trace of control and observation noise convariance')
+SaveFigPDF(11,'trace_sim_F'+string(Fnum))
+
+figure(12)
+clf
+hold on
+plot(lpoles,log(final_errex(:,1)+final_errex(:,2)),'-',lpoles,log(final_errex(:,3)+final_errex(:,4)),'-.')
+plot(lpoles,log(Final_err_real(:,1)+Final_err_real(:,2)),'s',lpoles,log(Final_err_real(:,3)+Final_err_real(:,4)),'*')
+grid on
+xlabel('pole frequency [rad]')
+ylabel('log of trace of error covariance ')
+legend('fb_{pred}','obs_{pred}','fb_{sim}','obs_{sim}','Location','best')
+title('Trace of control and observation noise convariance')
+SaveFigPDF(12,'trace_simcomp_F'+string(Fnum))
 
 %%
 figure(10)
