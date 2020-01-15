@@ -151,7 +151,7 @@ for lpole=1:20
 plot(bwbase*-1*lpole,'*','color',cmap(lpole*2,:))
 end
 
-legend('Controller poles','Steady Kalman filter poles','Observer poles','Location','best')
+legend('Controller poles','Steationary Kalman filter poles','Observer poles','Location','best')
 xlabel('Real')
 ylabel('Imaginary')
 SaveFigPDF(101,'polepositionwithKF_F'+string(Fnum))
