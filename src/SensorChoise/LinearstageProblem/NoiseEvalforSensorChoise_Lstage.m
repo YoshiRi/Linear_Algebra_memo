@@ -123,7 +123,7 @@ end
 legend('Controller poles','Observer poles')
 xlabel('Real')
 ylabel('Imaginary')
-SaveFigPDF(100,'poleposition_F',num2str(Fnum)))
+SaveFigPDF(100,strcat('poleposition_F',num2str(Fnum)))
 
 %% KF vs Poles
 KFPs = []
