@@ -128,7 +128,7 @@ plot(lpoles,log(final_errex(:,1)),'o-',lpoles,log(final_errex(:,2)),'x-',lpoles,
 grid on
 xlabel('pole frequency [rad]')
 ylabel('log of error covariance ')
-legend('pos','vel','pos_{servo}','vel_{servo}')
+legend('pos','vel','pos_{servo0}','vel_{servo0}')
 title('Terminal state variance')
 
 figure(33)
@@ -138,11 +138,46 @@ plot(lpoles,log(final_errex(:,3)),'o-',lpoles,log(final_errex(:,4)),'x-',lpoles,
 grid on
 xlabel('pole frequency [rad]')
 ylabel('log of error covariance ')
-legend('pos','vel','pos_{servo}','vel_{servo}')
+legend('pos','vel','pos_{servo0}','vel_{servo0}')
 title('Observation noise convariance')
 
-SaveFigPDF(22,strcat('statenoise_pred_acker_servo_F',num2str(Fnum)))
-SaveFigPDF(33,strcat('obsnoise_pred_acker_servo_F',num2str(Fnum)))
+SaveFigPDF(22,strcat('statenoise_pred_acker_servo0_F',num2str(Fnum)))
+SaveFigPDF(33,strcat('obsnoise_pred_acker_servo0_F',num2str(Fnum)))
+
+%%
+final_errex_servo1 = zeros(20,5);
+G = 0.05;
+
+for lpole = 1:20
+    Ks = acker(sysd.A',sysd.A'*sysd.C',exp(ST*bwbase*-1*lpole))';
+    Aex=[sysd.A+sysd.B*F -sysd.B*F -sysd.B*G;zeros(2) sysd.A-Ks*sysd.C*sysd.A zeros(2,1);-C 0 0 1];
+    eig(Aex)
+    Kex = [0;0;-Ks;-1];
+    Cnomex=Kex*W*Kex';
+    Pexends = dlyap(Aex,Cnomex);
+    final_errex_servo1(lpole,:)=diag(Pexends)';
+end
+figure(23)
+% plot(final_errex(:,1:3))
+grid on
+plot(lpoles,log(final_errex(:,1)),'o-',lpoles,log(final_errex(:,2)),'x-',lpoles,log(final_errex_servo1(:,1)),'o-.',lpoles,log(final_errex_servo1(:,2)),'x-.')
+grid on
+xlabel('pole frequency [rad]')
+ylabel('log of error covariance ')
+legend('pos','vel','pos_{servo1}','vel_{servo1}')
+title('Terminal state variance')
+
+figure(34)
+% plot(final_errex(:,4:6))
+grid on
+plot(lpoles,log(final_errex(:,3)),'o-',lpoles,log(final_errex(:,4)),'x-',lpoles,log(final_errex_servo1(:,3)),'o-.',lpoles,log(final_errex_servo1(:,4)),'x-.')
+grid on
+xlabel('pole frequency [rad]')
+ylabel('log of error covariance ')
+legend('pos','vel','pos_{servo1}','vel_{servo1}')
+title('Observation noise convariance')
+
+
 
 %%
 figure(100)
