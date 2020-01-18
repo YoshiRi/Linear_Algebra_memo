@@ -56,7 +56,9 @@ legend('pos','vel','Best')
 %%
 P_obs_ = zeros(2,2,len);
 Fnum = 5;
-F = -place(sysd.A,sysd.B,exp(ST*-Fnum*bwbase));
+%F = -place(sysd.A,sysd.B,exp(ST*-Fnum*bwbase));
+acbase = [1+0i,1+0i];
+F = -acker(sysd.A,sysd.B,exp(ST*-Fnum*acbase));
  
 
 sigma1 = 0.1
@@ -83,7 +85,6 @@ xlabel('pole frequency [rad]')
 ylabel('log of error covariance ')
 legend('pos','vel','acc','best')
 title('Terminal state variance')
-SaveFigPDF(2,strcat('statenoise_pred_F',num2str(Fnum)))
 
 figure(3)
 % plot(final_errex(:,4:6))
@@ -94,7 +95,7 @@ xlabel('pole frequency [rad]')
 ylabel('log of error covariance ')
 legend('pos','vel','acc','best')
 title('Observation noise convariance')
-SaveFigPDF(3,strcat('obsnoise_pred_F',num2str(Fnum)))
+
 
 [Min,stateindx]=min(final_errex(:,1)+final_errex(:,2))
 [Min,obsindx]=min(final_errex(:,3)+final_errex(:,4))
@@ -107,12 +108,17 @@ xlabel('pole frequency [rad]')
 ylabel('log of trace of error covariance ')
 legend('terminal state','observation err','Location','best')
 title('Trace of control and observation noise convariance')
+
+%% save image
+SaveFigPDF(2,strcat('statenoise_pred_F',num2str(Fnum)))
+SaveFigPDF(3,strcat('obsnoise_pred_F',num2str(Fnum)))
 SaveFigPDF(10,strcat('trace_pred_F',num2str(Fnum)))
+
 
 %%
 figure(100)
 clf
-plot(bwbase*-Fnum,'ro')
+plot(acbase*-Fnum,[0,0],'ro')
 grid on
 hold on
 
