@@ -31,7 +31,7 @@ x_obs(:,1) = [-1;2]; % converted
 x_obs2(:,1) = [-1;2]; % Non-converted
 U = sin(1*pi/3*time);
 
-acbase = [1,1];
+acbase = [1+0i,1+0i];
 
 
 final_err = zeros(20,2);
@@ -112,17 +112,18 @@ SaveFigPDF(10,strcat('trace_pred_acker_F',num2str(Fnum)))
 %%
 figure(100)
 clf
-plot(acbase*-Fnum,'ro')
+plot(real(acbase*-Fnum),imag(acbase*-Fnum),'ro')
 grid on
 hold on
 
 cmap = colormap;
 for lpole=1:20
-plot(acbase*-1*lpole,'*','color',cmap(lpole*2,:))
+plot(real(acbase*-1*lpole),imag(acbase*-1*lpole),'*','color',cmap(lpole*2,:))
 end
 legend('Controller poles','Observer poles')
 xlabel('Real')
 ylabel('Imaginary')
+%%
 SaveFigPDF(100,strcat('poleposition_acker_F',num2str(Fnum)))
 
 %% KF vs Poles
@@ -143,22 +144,20 @@ KFpoles
 
 figure(101)
 clf
-plot(acbase*-Fnum,[0,0],'ro')
+plot(real(acbase*-Fnum),imag(acbase*-Fnum),'ro')
 grid on
 hold on
 plot(KFpoles(:,1),[0,0],'mx')
 cmap = colormap;
 for lpole=1:20
-plot(acbase*-1*lpole,[0,0],'*','color',cmap(lpole*2,:))
+plot(real(acbase*-1*lpole),imag(acbase*-1*lpole),'*','color',cmap(lpole*2,:))
 end
 
 legend('Controller poles','Steationary Kalman filter poles','Observer poles','Location','best')
 xlabel('Real')
 ylabel('Imaginary')
+%%
 SaveFigPDF(101,strcat('polepositionwithKF_acker_F',num2str(Fnum)))
-
-
-
 
 %% simulation loop
 
@@ -298,7 +297,7 @@ xlabel('pole frequency [rad]')
 ylabel('log of error covariance ')
 legend('pos_{pred}','vel_{pred}','pos_{sim}','vel_{sim}','Location','eastoutside')
 title('Terminal state covariance with different poles')
-SaveFigPDF(6,strcat('statenoise_sim_acker_F',num2str(Fnum)))
+
 
 figure(7)
 clf
@@ -311,7 +310,6 @@ xlabel('pole frequency [rad]')
 ylabel('log of error covariance ')
 legend('pos_{pred}','vel_{pred}','pos_{sim}','vel_{sim}','Location','eastoutside')
 title('Observation noise with different poles')
-SaveFigPDF(7,strcat('obsnoise_sim_acker_F',num2str(Fnum)))
 
 
 figure(11)
@@ -324,7 +322,6 @@ xlabel('pole frequency [rad]')
 ylabel('log of trace of error covariance ')
 legend('terminal state','observation err','Location','best')
 title('Trace of control and observation noise convariance')
-SaveFigPDF(11,strcat('trace_sim_acker_F',num2str(Fnum)))
 
 figure(12)
 clf
@@ -336,16 +333,22 @@ xlabel('pole frequency [rad]')
 ylabel('log of trace of error covariance ')
 legend('fb_{pred}','obs_{pred}','fb_{sim}','obs_{sim}','Location','best')
 title('Trace of control and observation noise convariance')
-SaveFigPDF(12,strcat('trace_simcomp_acker_F',num2str(Fnum)))
+
 
 %%
+SaveFigPDF(6,strcat('statenoise_sim_acker_F',num2str(Fnum)))
+SaveFigPDF(7,strcat('obsnoise_sim_acker_F',num2str(Fnum)))
+SaveFigPDF(11,strcat('trace_sim_acker_F',num2str(Fnum)))
+SaveFigPDF(12,strcat('trace_simcomp_acker_F',num2str(Fnum)))
+%%
 figure(10)
-plot(time,x_gt)
+plot(time,x_gt,time,x_obs)
 grid on
 xlabel('time [s]')
 ylabel('state value')
-legend('pos','vel','acc')
+legend('pos','vel','pos','vel')
 
+%%
 figure(10)
 plot(time,x_gt)
 grid on
