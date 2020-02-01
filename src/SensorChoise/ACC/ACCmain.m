@@ -1,3 +1,6 @@
+%% zentei
+c_pole =[ -18.8496 + 0.0000i  -9.4248 -10.8828i  -9.4248 +10.8828i]; % butterworth pf 6 pi
+ST = 33*e-3; % 33ms
 %%
 syms TAU
 Asym = [0 1 0;0 0 1;0 0 -1/TAU]

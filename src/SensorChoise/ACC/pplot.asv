@@ -1,0 +1,7 @@
+function handle = pplot(Data,iter)
+
+handle = plot(real(Data),imag(Data),iter)
+xlabel('real')
+ylabel('imag')
+grid on
+end
