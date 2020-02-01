@@ -32,6 +32,9 @@ for i = 1:datanum
 end
 %%
 
+%for paper
+Ppred(1:2,:)'
+
 figure(1)
 plot(1:6,Ppred(:,1),'o',1:6,Ppred(:,2),'x',1:6,Ppred(:,3),'*',1:6,Ppred(:,4),'s')
 
