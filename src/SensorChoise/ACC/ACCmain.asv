@@ -1,0 +1,36 @@
+%%
+syms TAU
+Asym = [0 1 0;0 0 1;0 0 -1/TAU]
+Bsym = [0;0;1/TAU]
+syms Ts
+Adsym=expm([Asym Bsym;0 0 0 0])
+
+%%
+% C
+F1 = 0.075; F2 = 0.25;
+
+%%
+datanum = 4;
+
+sigmaset = [2.2634, 1.9050,3.6461,3.0518];
+STset = [351.9 160.9 70 108]/1000;
+tau_ = 0.2;
+
+Ppred = zeros(6,datanum);
+for i = 1:datanum
+    sigma_ = sigmaset(i);
+    ST_ = STset(i);
+    calcLyapunov;
+    Ppred(:,i) = diag(Pend);
+end
+%%
+
+figure(1)
+plot(1:6,Ppred(:,1),'o',1:6,Ppred(:,2),'x',1:6,Ppred(:,3),'*',1:6,Ppred(:,4),'s')
+
+%%
+figure(2)
+Ppredl = log(Ppred);
+plot(1:6,Ppredl(:,1),'o',1:6,Ppredl(:,2),'x',1:6,Ppredl(:,3),'*',1:6,Ppredl(:,4),'s')
+xticks([0 5 10])
+xticklabels({'x = 0','x = 5','x = 10'})
